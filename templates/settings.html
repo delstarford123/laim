@@ -92,6 +92,13 @@
             <div>Changes saved successfully. New thresholds applied to AI model.</div>
         </div>
         {% endif %}
+        
+        {% if error %}
+        <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <div>Error saving settings: {{ error }}</div>
+        </div>
+        {% endif %}
 
         <form action="/settings" method="POST">
             
@@ -102,16 +109,17 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label fw-bold small">Registered Farm Name</label>
-                        <input type="text" class="form-control" name="farm_name" value="Green Valley Dairy Ltd" required>
+                        <input type="text" class="form-control" name="farm_name" 
+                               value="{{ settings.farm_name }}" required>
                         <div class="form-text">Appears on PDF certificates.</div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold small">County / Location</label>
                         <select class="form-select" name="location">
-                            <option value="Kakamega">Kakamega</option>
-                            <option value="Kiambu">Kiambu</option>
-                            <option value="Uasin Gishu">Uasin Gishu</option>
-                            <option value="Nakuru">Nakuru</option>
+                            <option value="Kakamega" {% if settings.location == 'Kakamega' %}selected{% endif %}>Kakamega</option>
+                            <option value="Kiambu" {% if settings.location == 'Kiambu' %}selected{% endif %}>Kiambu</option>
+                            <option value="Uasin Gishu" {% if settings.location == 'Uasin Gishu' %}selected{% endif %}>Uasin Gishu</option>
+                            <option value="Nakuru" {% if settings.location == 'Nakuru' %}selected{% endif %}>Nakuru</option>
                         </select>
                     </div>
                 </div>
@@ -124,17 +132,21 @@
                 <div class="mb-4">
                     <label class="form-label fw-bold d-flex justify-content-between">
                         <span>Success Confidence Threshold</span>
-                        <span class="text-primary fw-bold" id="rangeVal">65%</span>
+                        <span class="text-primary fw-bold" id="rangeVal">{{ (settings.ai_threshold * 100) | int }}%</span>
                     </label>
-                    <input type="range" class="form-range" min="50" max="95" value="65" id="thresholdRange" name="threshold">
+                    <input type="range" class="form-range" min="50" max="95" 
+                           value="{{ (settings.ai_threshold * 100) | int }}" 
+                           id="thresholdRange" name="threshold">
+                           
                     <div class="form-text small mt-2">
                         <i class="bi bi-info-circle"></i> 
-                        If set to <strong>65%</strong>, the AI will recommend "PROCEED" only if the calculated probability is above 65%. Increasing this makes the system stricter (fewer approvals, higher safety).
+                        If set to <strong id="rangeText">{{ (settings.ai_threshold * 100) | int }}%</strong>, the AI will recommend "PROCEED" only if the calculated probability is higher than this value.
                     </div>
                 </div>
 
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="checkGenetic" checked>
+                    <input class="form-check-input" type="checkbox" id="checkGenetic" name="checkGenetic" 
+                           {% if settings.genetic_check %}checked{% endif %}>
                     <label class="form-check-label" for="checkGenetic">Force Genetic Compatibility Check</label>
                 </div>
             </div>
@@ -173,8 +185,12 @@
     <script>
         const range = document.getElementById('thresholdRange');
         const rangeVal = document.getElementById('rangeVal');
+        const rangeText = document.getElementById('rangeText');
+        
         range.addEventListener('input', function() {
-            rangeVal.textContent = this.value + "%";
+            const val = this.value + "%";
+            rangeVal.textContent = val;
+            rangeText.textContent = val;
         });
     </script>
 
