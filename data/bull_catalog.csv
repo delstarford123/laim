@@ -1,0 +1,50 @@
+bull_code,breed,sire_fertility_score,straw_motility_percent,price_ksh
+FR_001_KUG,Friesian,4.5,75,1500
+FR_002_SUPER,Friesian,4.7,80,2500
+FR_003_STD,Friesian,3.5,60,800
+AY_001_KE,Ayrshire,4.0,70,1300
+AY_002_ELITE,Ayrshire,4.6,78,1800
+JS_001_GOLD,Jersey,3.8,65,1200
+JS_002_HIGH,Jersey,4.4,72,1600
+GN_001_CREAM,Guernsey,4.1,68,1400
+GN_002_PRIME,Guernsey,4.5,75,1700
+SH_001_HARDY,Sahiwal,4.8,85,1000
+SH_002_BEEF,Sahiwal,4.9,88,1200
+BR_001_RANCH,Boran,4.7,82,900
+BR_002_KING,Boran,4.9,86,1100
+SM_001_DUAL,Fleckvieh,4.3,74,1600
+SM_002_MEAT,Fleckvieh,4.5,76,1900
+EZ_001_LOCAL,East African Zebu,4.9,90,500
+FR_SH_CROSS,Friesian-Sahiwal,4.6,80,1100
+AY_BR_CROSS,Ayrshire-Boran,4.5,78,1000
+JS_EZ_CROSS,Jersey-East African Zebu,4.2,70,800
+GN_FR_CROSS,Guernsey-Friesian,4.4,73,1300
+SM_JS_CROSS,Fleckvieh-Jersey,4.3,75,1400
+EZ_SH_CROSS,East African Zebu-Sahiwal,4.8,88,600
+BR_FR_CROSS,Boran-Friesian,4.7,82,950
+SM_AY_CROSS,Fleckvieh-Ayrshire,4.5,77,1500
+GN_JS_CROSS,Guernsey-Jersey,4.1,69,1250
+BR_SM_CROSS,Boran-Fleckvieh,4.6,79,1050
+EZ_BR_CROSS,East African Zebu-Boran,4.9,89,550
+FR_GN_CROSS,Friesian-Guernsey,4.5,74,1350
+JS_SM_CROSS,Jersey-Fleckvieh,4.3,71,1150
+AY_GN_CROSS,Ayrshire-Guernsey,4.4,72,1200
+SH_JS_CROSS,Sahiwal-Jersey,4.7,84,950
+SM_EZ_CROSS,Fleckvieh-East African Zebu,4.6,81,700
+FR_AY_CROSS,Friesian-Ayrshire,4.5,76,1450
+JS_FR_CROSS,Jersey-Friesian,4.4,73,1300
+GN_SH_CROSS,Guernsey-Sahiwal,4.8,87,900
+BR_JS_CROSS,Boran-Jersey,4.6,80,1000
+SM_FR_CROSS,Fleckvieh-Friesian,4.5,75,1550
+EZ_JS_CROSS,East African Zebu-Jersey,4.7,83,750
+FR_BR_CROSS,Friesian-Boran,4.6,78,1200
+AY_SM_CROSS,Ayrshire-Fleckvieh,4.4,71,1400
+JS_GN_CROSS,Jersey-Guernsey,4.3,70,1250
+SH_FR_CROSS,Sahiwal-Friesian,4.9,86,950
+SM_SH_CROSS,Fleckvieh-Sahiwal,4.7,79,1100
+EZ_SM_CROSS,East African Zebu-Fleckvieh,4.8,88,650
+BR_EZ_CROSS,Boran-East African Zebu,4.9,90,600
+FR_SM_CROSS,Friesian-Fleckvieh,4.5,77,1500
+AY_SH_CROSS,Ayrshire-Sahiwal,4.6,80,1000
+JS_BR_CROSS,Jersey-Boran,4.4,72,1150
+GN_EZ_CROSS,Guernsey-East African Zebu,4.7,85,800

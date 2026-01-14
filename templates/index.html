@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livestock AI Manager | Professional Dashboard</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --primary-color: #1b5e20;
+            --secondary-color: #2e7d32;
+            --accent-color: #4caf50;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+        }
+
+        body { 
+            background-color: #f1f5f9; 
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        .navbar-brand {
+            color: var(--primary-color) !important;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        .nav-link {
+            color: var(--text-dark) !important;
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin-left: 20px;
+        }
+        .nav-link.active {
+            color: var(--primary-color) !important;
+            background-color: #e8f5e9;
+            border-radius: 6px;
+            padding: 8px 16px;
+        }
+
+        /* Hero Section */
+        .hero-bg {
+            height: 320px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #0f3d13 100%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 0;
+            /* Subtle pattern overlay */
+            background-image: radial-gradient(#ffffff 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.95;
+        }
+
+        /* Main Card */
+        .main-card {
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-radius: 16px;
+            background: #ffffff;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Section Dividers */
+        .form-section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .form-section-title i {
+            color: var(--accent-color);
+            margin-right: 8px;
+            font-size: 1rem;
+        }
+
+        /* Floating Labels Overrides */
+        .form-floating > .form-control:focus, 
+        .form-floating > .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(27, 94, 32, 0.1);
+        }
+        .form-floating > label {
+            color: var(--text-light);
+        }
+
+        /* Result Box - "Certificate Style" */
+        .result-card {
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .result-card.success {
+            background: linear-gradient(to right, #f0fdf4, #ffffff);
+            border-left: 6px solid var(--primary-color);
+        }
+        .result-card.warning {
+            background: linear-gradient(to right, #fef2f2, #ffffff);
+            border-left: 6px solid #ef4444;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 4rem;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero-bg"></div>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-grid-3x3-gap-fill me-2"></i>LAIM<span class="fw-light text-muted fs-6 ms-2">| Enterprise Edition</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link active" href="/">Scanner</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/catalog">Genetics</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/history">Audit Logs</a></li>
+                    <li class="nav-item ms-3">
+                        <a href="/settings" class="btn btn-sm btn-outline-dark rounded-pill px-3">Settings</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="margin-top: 120px; padding-bottom: 60px;">
+        <div class="row justify-content-center">
+            
+            <div class="col-lg-8 text-center text-white mb-5 position-relative z-1">
+                <h1 class="fw-bold mb-2">Insemination Assessment</h1>
+                <p class="opacity-75">AI-Powered Decision Support System for Precision Breeding</p>
+            </div>
+
+            <div class="col-lg-9">
+                <div class="card main-card p-4 p-lg-5">
+                    
+                    <form action="/predict" method="POST">
+                        
+                        <div class="form-section-title">
+                            <i class="bi bi-qr-code"></i> Biological Identification
+                        </div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <select class="form-select" id="breed" name="breed" required>
+                                        <option value="Friesian">Friesian (High Yield)</option>
+                                        <option value="Jersey">Jersey (High Butterfat)</option>
+                                        <option value="Ayrshire">Ayrshire</option>
+                                        <option value="Sahiwal">Sahiwal (Hardy)</option>
+                                        <option value="Boran">Boran</option>
+                                        <option value="Guernsey">Guernsey</option>
+                                        <option value="Fleckvieh">Fleckvieh</option>
+                                    </select>
+                                    <label for="breed">Cattle Breed</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="number" class="form-control" id="age" name="age_months" placeholder="36" required>
+                                    <label for="age">Age (Months)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section-title">
+                            <i class="bi bi-clipboard-pulse"></i> Physical Condition & Health
+                        </div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="number" class="form-control" id="weight" name="weight_kg" placeholder="450" required>
+                                    <label for="weight">Weight (kg)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="number" step="0.1" class="form-control" id="bcs" name="bcs_score" placeholder="3.5" required>
+                                    <label for="bcs">Body Condition Score (1.0 - 5.0)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="number" class="form-control" id="parity" name="parity" placeholder="1" required>
+                                    <label for="parity">Parity (Number of Calvings)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section-title">
+                            <i class="bi bi-calendar-check"></i> Estrous Cycle & Genetics
+                        </div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="number" class="form-control" id="days" name="days_since_calving" placeholder="60" required>
+                                    <label for="days">Days Since Calving</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="number" class="form-control" id="activity" name="activity_index" placeholder="50">
+                                    <label for="activity">Activity Index (0-100)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <select class="form-select border-success" id="bull" name="semen_bull_code" required>
+                                        <option value="FR_001_KUG">FR_001_KUG (Friesian)</option>
+                                        <option value="FR_002_SUPER">FR_002_SUPER (Friesian)</option>
+                                        <option value="JS_001_GOLD">JS_001_GOLD (Jersey)</option>
+                                        <option value="SH_001_HARDY">SH_001_HARDY (Sahiwal)</option>
+                                        <option value="AY_001_KE">AY_001_KE (Ayrshire)</option>
+                                        <option value="BR_001_RANCH">BR_001_RANCH (Boran)</option>
+                                        <option value="SM_001_DUAL">SM_001_DUAL (Fleckvieh)</option>
+                                    </select>
+                                    <label for="bull" class="text-success fw-bold">Select Sire (Bull)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-5">
+                            <button type="submit" class="btn btn-success btn-lg py-3 fw-bold shadow-sm" style="background-color: var(--primary-color);">
+                                <i class="bi bi-cpu me-2"></i> Run Inference Model
+                            </button>
+                        </div>
+                    </form>
+
+                    {% if result %}
+                    <div class="mt-5 result-card {{ 'success' if result.raw_score > 0.65 else 'warning' }}">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <small class="text-uppercase fw-bold text-muted mb-1">Assessment Outcome</small>
+                                <h2 class="fw-bold {{ 'text-success' if result.raw_score > 0.65 else 'text-danger' }} mb-0">
+                                    {{ result.recommendation }}
+                                </h2>
+                                <p class="text-muted mt-2 mb-0">
+                                    <i class="bi bi-info-circle me-1"></i> {{ result.explanation }}
+                                </p>
+                            </div>
+                            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                                <div class="display-4 fw-bold">{{ result.probability }}<span class="fs-4">%</span></div>
+                                <span class="badge {{ 'bg-success' if result.raw_score > 0.65 else 'bg-danger' }}">Probability</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 pt-3 border-top d-flex justify-content-between text-muted" style="font-size: 0.85rem;">
+                            <span>Bull Used: <strong>{{ result.bull_used if result.bull_used else "N/A" }}</strong></span>
+                            <span>Ref ID: #{{ range(1000, 9999) | random }}</span>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center text-muted">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <p class="mb-1 fw-bold">Livestock AI Manager (LAIM)</p>
+                    <small class="d-block mb-3">Licensed for use in Kenya Agricultural Sector</small>
+                   <div class="d-flex justify-content-center gap-3">
+                    <a href="/privacy" class="text-decoration-none text-muted small">Privacy Policy</a>
+                    <a href="/terms" class="text-decoration-none text-muted small">Terms of Service</a>
+                     <a href="/support" class="text-decoration-none text-muted small">Support</a>
+                  </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

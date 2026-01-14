@@ -1,0 +1,18 @@
+# Python internals
+__pycache__/
+*.pyc
+
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Database (Don't upload local history)
+*.db
+*.sqlite3
+
+# Environment variables (Secrets)
+.env
+
+# VS Code settings
+.vscode/
