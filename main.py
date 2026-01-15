@@ -111,8 +111,109 @@ mail = Mail(app)
 
 from flask import render_template # Ensure this is imported
 
+from flask import url_for  # Make sure this is imported at the top
+from threading import Thread  # Import this at the top
+
+# ... inside your support route ...
+
 @app.route('/support', methods=['GET', 'POST'])
 def support():
+    if request.method == 'POST':
+        try:
+            # 1. Capture Data
+            form_data = {
+                'fullname': request.form.get('fullname'),
+                'phone': request.form.get('phone'),
+                'email': request.form.get('email'),
+                'location': request.form.get('location'),
+                'category': request.form.get('subject'),
+                'priority': request.form.get('priority'),
+                'message': request.form.get('message')
+            }
+
+            # 2. Save to DB
+            new_ticket = SupportTicket(email=form_data['email'], subject=form_data['category'], message=form_data['message'])
+            db.session.add(new_ticket)
+            db.session.commit()
+            
+            # Generate Logo Link
+            logo_link = url_for('static', filename='logo.png', _external=True)
+
+            # --- PREPARE EMAILS ---
+            msg_admin = Message(
+                subject=f"[{form_data['priority']}] New Support Ticket #{new_ticket.id}",
+                recipients=['delstarfordisaiah@gmail.com']
+            )
+            msg_admin.html = render_template('emails/admin_ticket.html', logo_url=logo_link, **form_data, ticket_id=new_ticket.id)
+
+            msg_user = Message(
+                subject=f"Confirmation: Support Ticket #{new_ticket.id}",
+                recipients=[form_data['email']]
+            )
+            msg_user.html = render_template('emails/user_confirmation.html', logo_url=logo_link, **form_data, ticket_id=new_ticket.id)
+
+            # --- SEND IN BACKGROUND (Prevents Timeout) ---
+            def send_async_email(app, msg):
+                with app.app_context():
+                    try:
+                        mail.send(msg)
+                    except Exception as e:
+                        print(f"Background Email Error: {e}")
+
+            # Start background threads
+            # We pass 'app._get_current_object()' to ensure the thread knows about the Flask app config
+            Thread(target=send_async_email, args=(app._get_current_object(), msg_admin)).start()
+            Thread(target=send_async_email, args=(app._get_current_object(), msg_user)).start()
+
+            return render_template('support.html', success=f"Ticket #{new_ticket.id} Submitted Successfully!")
+
+        except Exception as e:
+            return render_template('support.html', error=str(e))
+
+    return render_template('support.html')
+# ... inside your support() route ...
+@app.route('/supportm', methods=['GET', 'POST'])
+def supportm():
+    if request.method == 'POST':
+        try:
+            # 1. Capture Data
+            # ... (your existing data capture code) ...
+            
+            # --- NEW: GENERATE LOGO LINK ---
+            # _external=True creates the full http://... link automatically
+            logo_link = url_for('static', filename='logo.png', _external=True)
+
+            # 2. Save to DB (Existing code)
+            new_ticket = SupportTicket(...) 
+            db.session.add(new_ticket)
+            db.session.commit()
+            
+            # 3. Send Admin Email (Pass logo_url)
+            msg_admin = Message(
+                subject=f"[{request.form.get('priority')}] New Support Ticket #{new_ticket.id}",
+                recipients=['delstarfordisaiah@gmail.com']
+            )
+            # PASS 'logo_url=logo_link' HERE
+            msg_admin.html = render_template('emails/admin_ticket.html', logo_url=logo_link, **form_data, ticket_id=new_ticket.id)
+            mail.send(msg_admin)
+
+            # 4. Send User Email (Pass logo_url)
+            msg_user = Message(
+                subject=f"Confirmation: Support Ticket #{new_ticket.id}",
+                recipients=[request.form.get('email')]
+            )
+            # PASS 'logo_url=logo_link' HERE
+            msg_user.html = render_template('emails/user_confirmation.html', logo_url=logo_link, **form_data, ticket_id=new_ticket.id)
+            mail.send(msg_user)
+
+            return render_template('support.html', success=f"Ticket #{new_ticket.id} Submitted Successfully!")
+
+        except Exception as e:
+            return render_template('support.html', error=str(e))
+
+    return render_template('support.html')
+@app.route('/supportt', methods=['GET', 'POST'])
+def supportt():
     if request.method == 'POST':
         try:
             # 1. Capture Data
