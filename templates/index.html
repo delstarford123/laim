@@ -121,6 +121,21 @@
             border-left: 6px solid #ef4444;
         }
 
+        /* Accordion / Guide Styles */
+        .accordion-button:not(.collapsed) {
+            background-color: #f0fdf4;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        .accordion-button:focus {
+            box-shadow: none;
+            border-color: rgba(0,0,0,.125);
+        }
+        .table-success-custom {
+            background-color: #dcfce7 !important;
+            border-left: 4px solid var(--primary-color);
+        }
+
         /* Footer */
         footer {
             margin-top: 4rem;
@@ -159,9 +174,9 @@
         <div class="row justify-content-center">
             
             <div class="col-lg-8 text-center mb-5 position-relative z-1">
-    <h1 class="fw-bold mb-2" style="color: #1b5e20;">Insemination Assessment</h1>
-    <p class="opacity-75" style="color: #1b5e20;">AI-Powered Decision Support System for Precision Breeding</p>
-</div>
+                <h1 class="fw-bold mb-2" style="color: #1b5e20;">Insemination Assessment</h1>
+                <p class="opacity-75" style="color: #1b5e20;">AI-Powered Decision Support System for Precision Breeding</p>
+            </div>
 
             <div class="col-lg-9">
                 <div class="card main-card p-4 p-lg-5">
@@ -293,8 +308,90 @@
                         {% endif %}
 
                     {% endif %}
+                </div>
+
+                <div class="mt-5">
+                    <h5 class="fw-bold text-muted mb-3 ps-2 border-start border-4 border-success">Field Reference Guide</h5>
+                    
+                    <div class="accordion shadow-sm rounded overflow-hidden" id="guideAccordion">
+                        
+                        <div class="accordion-item border-0">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBCS">
+                                    <i class="bi bi-rulers me-2 text-success"></i> Understanding Body Condition Score (BCS)
+                                </button>
+                            </h2>
+                            <div id="collapseBCS" class="accordion-collapse collapse" data-bs-parent="#guideAccordion">
+                                <div class="accordion-body p-0">
+                                    <table class="table table-striped table-hover mb-0" style="font-size: 0.9rem;">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>Score</th>
+                                                <th>Description</th>
+                                                <th>Key Indicators</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="fw-bold text-danger">1.0 (Emaciated)</td>
+                                                <td>Skeleton clearly visible.</td>
+                                                <td>Deep "V" shape in thurls. Spine and ribs are sharp and jagged.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fw-bold text-warning">2.0 (Thin)</td>
+                                                <td>Bones visible but not jagged.</td>
+                                                <td>"V" shape in thurls. Short ribs visible but rounded.</td>
+                                            </tr>
+                                            <tr class="table-success-custom">
+                                                <td class="fw-bold text-success">3.0 (Ideal)</td>
+                                                <td>Smooth frame. <span class="badge bg-success">Target</span></td>
+                                                <td>Thurl is shallow "U" shape. Ribs visible only with pressure.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fw-bold">4.0 (Fat)</td>
+                                                <td>Boxy and flat.</td>
+                                                <td>Thurl is flat. Short ribs cannot be felt easily.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fw-bold text-danger">5.0 (Obese)</td>
+                                                <td>Bones buried in fat.</td>
+                                                <td>Tailhead buried in fat folds. "Blocky" appearance.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item border-0 border-top">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTerms">
+                                    <i class="bi bi-book me-2 text-success"></i> Key Terminology
+                                </button>
+                            </h2>
+                            <div id="collapseTerms" class="accordion-collapse collapse" data-bs-parent="#guideAccordion">
+                                <div class="accordion-body bg-white">
+                                    <ul class="list-unstyled mb-0">
+                                        <li class="mb-3">
+                                            <strong class="text-success">Activity Index (0-100):</strong>
+                                            <p class="small text-muted mb-0">A measure of cow movement. High activity (>70) often indicates the cow is in <strong>Estrus (Heat)</strong> and restless.</p>
+                                        </li>
+                                        <li class="mb-3">
+                                            <strong class="text-success">Parity:</strong>
+                                            <p class="small text-muted mb-0">The number of times the cow has successfully given birth. Parity 0 is a heifer; Parity 1+ is a cow.</p>
+                                        </li>
+                                        <li>
+                                            <strong class="text-success">Days Since Calving (DIM):</strong>
+                                            <p class="small text-muted mb-0">Ideally, insemination should occur <strong>60 to 90 days</strong> after the last birth to allow the uterus to heal.</p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-            </div>
+                </div>
+                </div>
         </div>
 
         <footer class="text-center text-muted">
