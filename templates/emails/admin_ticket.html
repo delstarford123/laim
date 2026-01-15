@@ -1,0 +1,29 @@
+<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: auto; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+    <div style="background-color: #1e293b; color: white; padding: 20px; text-align: center;">
+        <h2 style="margin: 0;">New Support Ticket</h2>
+        <span style="background: #1b5e20; padding: 5px 15px; border-radius: 20px; font-size: 12px;">ID: #{{ ticket_id }}</span>
+    </div>
+    <div style="padding: 30px; background-color: #ffffff;">
+        <h4 style="color: #64748b; text-transform: uppercase; font-size: 12px; margin-bottom: 10px;">User Details</h4>
+        <table style="width: 100%; margin-bottom: 20px;">
+            <tr><td style="color: #1e293b; font-weight: bold;">Name:</td><td>{{ fullname }}</td></tr>
+            <tr><td style="color: #1e293b; font-weight: bold;">Email:</td><td>{{ email }}</td></tr>
+            <tr><td style="color: #1e293b; font-weight: bold;">Phone:</td><td>{{ phone }}</td></tr>
+            <tr><td style="color: #1e293b; font-weight: bold;">Location:</td><td>{{ location }}</td></tr>
+        </table>
+
+        <h4 style="color: #64748b; text-transform: uppercase; font-size: 12px; margin-bottom: 10px;">Issue Details</h4>
+        <div style="background: #f1f5f9; padding: 15px; border-radius: 8px;">
+            <p style="margin: 0;"><strong>Category:</strong> {{ category }}</p>
+            <p style="margin: 10px 0 0 0;"><strong>Priority:</strong> {{ priority }}</p>
+        </div>
+
+        <h4 style="color: #64748b; text-transform: uppercase; font-size: 12px; margin-top: 20px; margin-bottom: 10px;">Message</h4>
+        <p style="color: #334155; line-height: 1.6; background: #fffbeb; padding: 15px; border-left: 4px solid #f59e0b;">
+            {{ message }}
+        </p>
+    </div>
+    <div style="background-color: #f8fafc; padding: 15px; text-align: center; color: #94a3b8; font-size: 11px;">
+        LAIM Enterprise Auto-Inference System &bull; Kakamega, Kenya
+    </div>
+</div>

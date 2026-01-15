@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bull Catalog Admin | Livestock AI Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f1f5f9; font-family: 'Inter', sans-serif; }
+        .admin-header { background: #1e293b; color: white; padding: 1.5rem 0; }
+        .card { border: none; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .table-hover tbody tr:hover { background-color: #f8fafc; }
+        .form-label { font-size: 0.85rem; font-weight: 600; color: #64748b; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <div class="admin-header mb-4">
+        <div class="container d-flex justify-content-between align-items-center">
+            <h4 class="mb-0 fw-bold"><i class="bi bi-database-fill-gear me-2"></i>Knowledge Base Administrator</h4>
+            <a href="/" class="btn btn-outline-light btn-sm">Exit to Dashboard</a>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <div class="row g-4">
+            
+            <div class="col-lg-4">
+                <div class="card p-4">
+                    <h5 class="fw-bold mb-3 text-success"><i class="bi bi-plus-circle me-2"></i>Add New Sire</h5>
+                    <hr>
+                    <form action="/admin/bulls" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">Bull Code (ID)</label>
+                            <input type="text" class="form-control" name="bull_code" placeholder="e.g. FR_005_MEGA" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Breed</label>
+                            <select class="form-select" name="breed">
+                                <option value="Friesian">Friesian</option>
+                                <option value="Jersey">Jersey</option>
+                                <option value="Ayrshire">Ayrshire</option>
+                                <option value="Sahiwal">Sahiwal</option>
+                                <option value="Boran">Boran</option>
+                            </select>
+                        </div>
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label">Fertility Score</label>
+                                <input type="number" step="0.1" class="form-control" name="sire_fertility_score" placeholder="0-100" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Motility %</label>
+                                <input type="number" step="0.1" class="form-control" name="straw_motility_percent" placeholder="e.g. 65" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Avg Conception Rate</label>
+                            <input type="number" step="0.01" class="form-control" name="avg_conception_rate" placeholder="e.g. 0.65" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Source / Agency</label>
+                            <input type="text" class="form-control" name="source" placeholder="e.g. KAGRC" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100 fw-bold py-2">
+                            Save to Catalog <i class="bi bi-save ms-2"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="card p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0">Current Bull Catalog</h5>
+                        <span class="badge bg-secondary">{{ bulls|length }} Records</span>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Breed</th>
+                                    <th>Fertility</th>
+                                    <th>Motility</th>
+                                    <th>Source</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for bull in bulls %}
+                                <tr>
+                                    <td class="fw-bold text-primary">{{ bull.bull_code }}</td>
+                                    <td><span class="badge bg-light text-dark border">{{ bull.breed }}</span></td>
+                                    <td>{{ bull.sire_fertility_score }}</td>
+                                    <td>{{ bull.straw_motility_percent }}%</td>
+                                    <td class="text-muted small">{{ bull.source }}</td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">
+                                        No bulls found in catalog. Add one on the left.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

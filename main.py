@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from src.predict import InseminationPredictor
-
+import os
+from dotenv import load_dotenv  # Import this
 app = Flask(__name__)
 # 1. Database Configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///farm.db'
@@ -89,29 +90,146 @@ def settings():
 
     # GET request: Just show current settings
     return render_template('settings.html', settings=current_settings, saved=False)
+# ... existing imports ...
+from flask_mail import Mail, Message  # Import Flask-Mail
+
+# --- 1. CONFIGURE FLASK-MAIL ---
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'delstarfordisaiah@gmail.com'  # Your Email
+import os
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = ('LAIM Support Bot', 'delstarfordisaiah@gmail.com')
+
+mail = Mail(app)
+
+# ... existing code ...
+
+
+
+
+from flask import render_template # Ensure this is imported
 
 @app.route('/support', methods=['GET', 'POST'])
 def support():
     if request.method == 'POST':
         try:
-            # 1. Extract data
-            email = request.form.get('email')
-            subject = request.form.get('subject')
-            message = request.form.get('message')
+            # 1. Capture Data
+            form_data = {
+                'fullname': request.form.get('fullname'),
+                'phone': request.form.get('phone'),
+                'email': request.form.get('email'),
+                'location': request.form.get('location'),
+                'category': request.form.get('subject'),
+                'priority': request.form.get('priority'),
+                'message': request.form.get('message')
+            }
 
-            # 2. Create Ticket
-            new_ticket = SupportTicket(email=email, subject=subject, message=message)
+            # 2. Save to DB
+            new_ticket = SupportTicket(email=form_data['email'], subject=form_data['category'], message=form_data['message'])
+            db.session.add(new_ticket)
+            db.session.commit()
+            form_data['ticket_id'] = new_ticket.id
+
+            # 3. Send Professional Admin Email
+            msg_admin = Message(
+                subject=f"[{form_data['priority']}] New Support Ticket #{new_ticket.id}",
+                recipients=['delstarfordisaiah@gmail.com']
+            )
+            msg_admin.html = render_template('emails/admin_ticket.html', **form_data)
+            mail.send(msg_admin)
+
+            # 4. Send Professional User Confirmation
+            msg_user = Message(
+                subject=f"Confirmation: Support Ticket #{new_ticket.id}",
+                recipients=[form_data['email']]
+            )
+            msg_user.html = render_template('emails/user_confirmation.html', **form_data)
+            mail.send(msg_user)
+
+            return render_template('support.html', success=f"Ticket #{new_ticket.id} Submitted Successfully!")
+
+        except Exception as e:
+            return render_template('support.html', error=str(e))
+
+    return render_template('support.html')
+
+
+
+
+
+# --- UPDATE THIS ROUTE IN main.py ---
+@app.route('/supporttt', methods=['GET', 'POST'])
+def supporttt():
+    if request.method == 'POST':
+        try:
+            # 1. Extract Data
+            user_email = request.form.get('email')
+            subject_category = request.form.get('subject')
+            message_body = request.form.get('message')
+
+            # 2. Save to Database
+            new_ticket = SupportTicket(email=user_email, subject=subject_category, message=message_body)
             db.session.add(new_ticket)
             db.session.commit()
 
-            # 3. Show Success Message
-            flash_message = "Ticket Submitted! Reference ID: #{}".format(new_ticket.id)
+            # ---------------------------------------------------------
+            # EMAIL 1: Send to Admin (YOU - delstarfordisaiah@gmail.com)
+            # ---------------------------------------------------------
+            msg_admin = Message(
+                subject=f"🔔 New Ticket #{new_ticket.id}: {subject_category}",
+                recipients=['delstarfordisaiah@gmail.com'], # <--- Your Email Here
+                body=f"""
+                A new support ticket has been submitted.
+                
+                Ticket ID: #{new_ticket.id}
+                From: {user_email}
+                Category: {subject_category}
+                
+                Message:
+                {message_body}
+                """
+            )
+            mail.send(msg_admin)
+
+            # ---------------------------------------------------------
+            # EMAIL 2: Send to User (The Farmer)
+            # ---------------------------------------------------------
+            msg_user = Message(
+                subject=f"Ticket #{new_ticket.id} Received - LAIM Support",
+                recipients=[user_email], # <--- The User's Email from the form
+                body=f"""
+                Hello,
+                
+                We have received your support request regarding "{subject_category}". 
+                Our team is reviewing it and will contact you shortly.
+                
+                Your Reference ID: #{new_ticket.id}
+                
+                Best regards,
+                Livestock AI Manager Support Team
+                """
+            )
+            mail.send(msg_user)
+
+            # ---------------------------------------------------------
+            
+            flash_message = f"Ticket #{new_ticket.id} Submitted! Check your email for confirmation."
             return render_template('support.html', success=flash_message)
 
         except Exception as e:
-            return render_template('support.html', error="Failed to submit: " + str(e))
+            print(f"Error sending email: {e}")
+            # Still show success for the ticket creation, but warn about email
+            return render_template('support.html', error="Ticket saved, but email notification failed. Error: " + str(e))
 
     return render_template('support.html')
+
+
+
+
+
+
 @app.route('/download_report/<int:id>')
 def download_report(id):
     # 1. Fetch record from DB
@@ -147,7 +265,55 @@ def download_report(id):
     
     return redirect(url_for('static', filename=filename))
 import pandas as pd
+# ... existing imports ...
+import csv
+import os
 
+# --- NEW ADMIN ROUTE FOR BULL MANAGEMENT ---
+@app.route('/admin/bulls', methods=['GET', 'POST'])
+def admin_bulls():
+    bull_csv_path = 'data/bull_catalog.csv'
+    
+    # 1. Handle Form Submission (Adding a new Bull)
+    if request.method == 'POST':
+        try:
+            # Extract data from form
+            new_bull = {
+                'bull_code': request.form.get('bull_code'),
+                'breed': request.form.get('breed'),
+                'sire_fertility_score': request.form.get('sire_fertility_score'),
+                'straw_motility_percent': request.form.get('straw_motility_percent'),
+                'avg_conception_rate': request.form.get('avg_conception_rate'),
+                'source': request.form.get('source')
+            }
+
+            # Check if file exists, if not create with headers
+            file_exists = os.path.isfile(bull_csv_path)
+            
+            with open(bull_csv_path, mode='a', newline='') as csvfile:
+                fieldnames = ['bull_code', 'breed', 'sire_fertility_score', 'straw_motility_percent', 'avg_conception_rate', 'source']
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+                if not file_exists:
+                    writer.writeheader()
+                
+                writer.writerow(new_bull)
+
+            flash(f"Success! Bull {new_bull['bull_code']} added to catalog.", "success")
+            
+        except Exception as e:
+            flash(f"Error adding bull: {str(e)}", "danger")
+            
+        return redirect('/admin/bulls')
+
+    # 2. Handle Viewing the Catalog (GET Request)
+    bulls = []
+    if os.path.exists(bull_csv_path):
+        with open(bull_csv_path, mode='r') as csvfile:
+            reader = csv.DictReader(csvfile)
+            bulls = list(reader)
+    
+    return render_template('admin_bulls.html', bulls=bulls)
 @app.route('/catalog')
 def catalog():
     # Load the CSV to display on the web

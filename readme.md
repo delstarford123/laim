@@ -46,7 +46,7 @@ Below is a production-ready README file. You can copy this directly into your Gi
 
 Markdown
 
-# 🧬 Livestock AI-Manager (LAIM)
+#  Livestock AI-Manager (LAIM)
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg) ![Python](https://img.shields.io/badge/Python-3.9%2B-yellow) ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -57,14 +57,14 @@ Markdown
 [Image of bovine estrous cycle stages]
 
 
-## 🚀 Key Features
+## Key Features
 
-* **📈 Estrus Timing Predictor:** Uses time-series analysis (activity/temperature) to recommend the exact hour for insemination (AM/PM rule).
-* **🧬 Conception Probability Engine:** Calculates a percentage likelihood of success based on cow biometrics (Age, BCS, Parity) and semen quality.
-* **📅 Herd Management Dashboard:** Tracks cycles, predicts return-to-heat dates, and generates alerts for technicians.
-* **📱 Offline-First Architecture:** Designed to run inference on edge devices (Raspberry Pi/Laptop) in low-connectivity farm areas.
+* **Estrus Timing Predictor:** Uses time-series analysis (activity/temperature) to recommend the exact hour for insemination (AM/PM rule).
+* **Conception Probability Engine:** Calculates a percentage likelihood of success based on cow biometrics (Age, BCS, Parity) and semen quality.
+* **Herd Management Dashboard:** Tracks cycles, predicts return-to-heat dates, and generates alerts for technicians.
+* **Offline-First Architecture:** Designed to run inference on edge devices (Raspberry Pi/Laptop) in low-connectivity farm areas.
 
-## 🧠 The AI Architecture
+## The AI Architecture
 
 LAIM utilizes a hybrid ensemble pipeline:
 1.  **Time-Series Module (LSTM):** Processes sensor data streams to detect hormonal spikes indicating ovulation.
@@ -74,7 +74,7 @@ $$P(Success) = \sigma(\sum w_i x_i + b)$$
 
 Where $x$ represents features such as *Days Since Calving*, *Activity Spike Magnitude*, and *Semen Motility*.
 
-## 🛠️ Installation
+##  Installation
 
 ### Prerequisites
 * Python 3.9+
@@ -97,7 +97,7 @@ Where $x$ represents features such as *Days Since Calving*, *Activity Spike Magn
     python manage.py migrate_db
     ```
 
-## 💻 Usage
+## Usage
 
 ### 1. Training the Model
 If you have your own dataset (CSV format), place it in the `/data` folder and run:
@@ -137,7 +137,7 @@ livestock-ai-manager/
 ├── src/
 │   ├── preprocessing.py   # Data cleaning and feature engineering
 │   ├── training.py        # XGBoost and LSTM training loops
-│   ├── inference.py       # Real-time prediction logic
+│   ├── predict.py       # Real-time prediction logic
 │   └── utils.py           # Helper functions for date calculations
 ├── dashboard.py           # Web interface (Streamlit/Flask)
 ├── requirements.txt       # Dependencies

@@ -1,6 +1,5 @@
 import xgboost as xgb
 import joblib
-import numpy as np
 import pandas as pd
 import os
 from sklearn.model_selection import train_test_split
@@ -45,23 +44,28 @@ def train_model(farm_path, bull_path, model_save_path='models/livestock_xgb.pkl'
     print("🚀 Starting Training Pipeline...")
     
     # --- STEP 1: PREPARE DATA ---
-    # Merge the files first
+    # Merge farm data + bull data first
     merged_df = load_and_merge_data(farm_path, bull_path)
     
     # Save to a temporary file so the Preprocessor can read it
     temp_data_path = 'data/temp_merged_training.csv'
     merged_df.to_csv(temp_data_path, index=False)
     
-    # --- STEP 2: PREPROCESS ---
+    # --- STEP 2: PREPROCESS (NOW WITH WEATHER) ---
+    print("🌦️  Initializing Preprocessor with Weather Context...")
     processor = LivestockPreprocessor()
-    # pass the merged temporary file to the processor
+    
+    # This function now automatically:
+    # 1. Reads the temp CSV
+    # 2. Reads 'weather_data.csv'
+    # 3. Merges them
+    # 4. Fits the scalers/encoders
     X, y = processor.fit_transform_save(temp_data_path)
     
     # --- STEP 3: SPLIT DATA ---
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
     # --- STEP 4: HANDLE IMBALANCE (SMOTE) ---
-    # Generates synthetic examples of the minority class (usually 'Success')
     print("⚖️  Balancing dataset with SMOTE...")
     smote = SMOTE(random_state=42)
     X_train_resampled, y_train_resampled = smote.fit_resample(X_train, y_train)
@@ -73,7 +77,6 @@ def train_model(farm_path, bull_path, model_save_path='models/livestock_xgb.pkl'
         learning_rate=0.05,
         max_depth=5,
         eval_metric='logloss'
-        # use_label_encoder=False is deprecated in newer XGBoost versions, usually safe to omit or keep
     )
     
     # --- STEP 6: TRAIN ---
@@ -87,13 +90,13 @@ def train_model(farm_path, bull_path, model_save_path='models/livestock_xgb.pkl'
     print("Classification Report:\n", classification_report(y_test, predictions))
     
     # --- STEP 8: SAVE MODEL ---
-    # Ensure the models directory exists
     os.makedirs(os.path.dirname(model_save_path), exist_ok=True)
     joblib.dump(model, model_save_path)
     print(f"💾 Model saved to {model_save_path}")
     
-    # Optional: Clean up temp file
-    # os.remove(temp_data_path) 
+    # Clean up temp file
+    if os.path.exists(temp_data_path):
+        os.remove(temp_data_path)
 
 if __name__ == "__main__":
     # Define paths
